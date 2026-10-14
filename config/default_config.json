@@ -1,0 +1,40 @@
+{
+  "waste_full_threshold": 10,
+  "containers": {
+    "water":    { "unit": "mL", "max_capacity": 1500, "low_threshold": 200,  "initial_level": 1500 },
+    "coffee_a": { "unit": "g",  "max_capacity": 250,  "low_threshold": 20,   "initial_level": 250  },
+    "coffee_b": { "unit": "g",  "max_capacity": 250,  "low_threshold": 20,   "initial_level": 250  },
+    "milk":     { "unit": "mL", "max_capacity": 500,  "low_threshold": 100,  "initial_level": 500  },
+    "cacao":    { "unit": "g",  "max_capacity": 200,  "low_threshold": 20,   "initial_level": 200  }
+  },
+  "recipes": {
+    "espresso": {
+      "name": "Espresso",
+      "requirements": { "water": 30, "coffee_a": 7 }
+    },
+    "americano": {
+      "name": "Americano",
+      "requirements": { "water": 120, "coffee_a": 7 }
+    },
+    "cappuccino": {
+      "name": "Cappuccino",
+      "requirements": { "water": 30, "coffee_a": 7, "milk": 100 }
+    },
+    "latte": {
+      "name": "Latte",
+      "requirements": { "water": 30, "coffee_a": 7, "milk": 150 }
+    },
+    "coffee_b_espresso": {
+      "name": "Coffee B Espresso",
+      "requirements": { "water": 30, "coffee_b": 7 }
+    },
+    "hot_chocolate": {
+      "name": "Hot Chocolate",
+      "requirements": { "water": 150, "milk": 100, "cacao": 20 }
+    },
+    "mocha": {
+      "name": "Mocha",
+      "requirements": { "water": 30, "coffee_a": 7, "milk": 100, "cacao": 10 }
+    }
+  }
+}

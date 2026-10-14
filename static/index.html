@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Coffee Machine</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <span class="logo">&#9749;</span>
+      <h1>Virtual Coffee Machine</h1>
+      <div id="machine-badge" class="badge badge--loading">&#8226; Loading</div>
+    </div>
+  </header>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="brew">Brew</button>
+    <button class="tab-btn" data-tab="containers">Containers</button>
+    <button class="tab-btn" data-tab="configuration">Configuration</button>
+  </nav>
+
+  <main>
+
+    <!-- ── Brew ── -->
+    <section id="tab-brew" class="tab-pane active">
+      <div id="beverages-grid" class="card-grid"></div>
+    </section>
+
+    <!-- ── Containers ── -->
+    <section id="tab-containers" class="tab-pane">
+      <div id="containers-grid" class="card-grid"></div>
+      <div id="waste-card-wrap"></div>
+    </section>
+
+    <!-- ── Configuration ── -->
+    <section id="tab-configuration" class="tab-pane">
+      <div id="config-panel"></div>
+    </section>
+
+  </main>
+
+  <div id="toast-rack"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
