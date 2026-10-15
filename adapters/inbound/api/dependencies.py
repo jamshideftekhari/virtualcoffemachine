@@ -15,17 +15,17 @@ from application.use_cases.get_container_state import GetAllContainerStates, Get
 
 def get_brew_beverage(request: Request) -> BrewBeverage:
     s = request.app.state
-    return BrewBeverage(s.container_repo, s.config, s.machine, s.alerts)
+    return BrewBeverage(s.container_repo, s.config, s.machine, s.alerts, s.display)
 
 
 def get_fill_container(request: Request) -> FillContainer:
     s = request.app.state
-    return FillContainer(s.container_repo, s.config, s.machine, s.alerts)
+    return FillContainer(s.container_repo, s.config, s.machine, s.alerts, s.display)
 
 
 def get_empty_waste(request: Request) -> EmptyWaste:
     s = request.app.state
-    return EmptyWaste(s.container_repo, s.machine)
+    return EmptyWaste(s.container_repo, s.machine, s.display)
 
 
 def get_apply_configuration(request: Request) -> ApplyConfiguration:

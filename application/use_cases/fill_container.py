@@ -8,6 +8,7 @@ from domain.model.value_objects import ContainerId, MachineState, Quantity
 from application.ports.alert_port import AlertPort
 from application.ports.configuration_port import ConfigurationPort
 from application.ports.container_repository import ContainerRepository
+from application.ports.display_port import DisplayPort
 from application.use_cases.results import ContainerStateView
 
 
@@ -25,11 +26,13 @@ class FillContainer:
         config: ConfigurationPort,
         machine: CoffeeMachine,
         alerts: AlertPort,
+        display: DisplayPort,
     ) -> None:
         self._containers = containers
         self._config = config
         self._machine = machine
         self._alerts = alerts
+        self._display = display
 
     def execute(self, container_id: ContainerId, target_level: float) -> ContainerStateView:
         container = self._containers.get(container_id)
@@ -48,6 +51,7 @@ class FillContainer:
         # Recover machine from ERROR when an operator fills a container
         if self._machine.state == MachineState.ERROR:
             self._machine.transition(MachineState.READY)
+            self._display.show_ready()
 
         return ContainerStateView(
             container_id=container.id.value,

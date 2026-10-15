@@ -4,6 +4,7 @@ from domain.model.machine import CoffeeMachine
 from domain.model.value_objects import MachineState
 
 from application.ports.container_repository import ContainerRepository
+from application.ports.display_port import DisplayPort
 from application.use_cases.results import WasteStateView
 
 
@@ -19,9 +20,11 @@ class EmptyWaste:
         self,
         containers: ContainerRepository,
         machine: CoffeeMachine,
+        display: DisplayPort,
     ) -> None:
         self._containers = containers
         self._machine = machine
+        self._display = display
 
     def execute(self) -> WasteStateView:
         waste = self._containers.get_waste()
@@ -30,6 +33,7 @@ class EmptyWaste:
 
         if self._machine.state == MachineState.ERROR:
             self._machine.transition(MachineState.READY)
+            self._display.show_ready()
 
         return WasteStateView(
             brew_count=waste.brew_count,

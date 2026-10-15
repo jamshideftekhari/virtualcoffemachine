@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -14,6 +15,7 @@ from adapters.inbound.api.operator_router import router as operator_router
 from adapters.outbound.default_configuration_adapter import DefaultConfigurationAdapter
 from adapters.outbound.in_memory_container_repository import InMemoryContainerRepository
 from adapters.outbound.log_alert_adapter import LogAlertAdapter
+from adapters.outbound.log_display_adapter import LogDisplayAdapter
 from domain.exceptions import (
     ExceedsMaxCapacity,
     InsufficientIngredient,
@@ -29,6 +31,19 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(name)s  %(messa
 CONFIG_PATH = Path(__file__).parent / "config" / "default_config.json"
 
 
+def create_display():
+    """Use the Sense HAT LED matrix when one is attached, otherwise just log."""
+    try:
+        from adapters.outbound.sense_hat_display_adapter import SenseHatDisplayAdapter
+
+        return SenseHatDisplayAdapter(rotation=int(os.environ.get("SENSE_HAT_ROTATION", "0")))
+    except (ImportError, OSError) as exc:
+        logging.getLogger("coffee_machine.display").info(
+            "Sense HAT not available (%s) — logging display output instead", exc
+        )
+        return LogDisplayAdapter()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # --- Startup: wire all adapters and seed state ---
@@ -37,14 +52,18 @@ async def lifespan(app: FastAPI):
     machine = CoffeeMachine()
     machine.transition(MachineState.READY)
     alerts = LogAlertAdapter()
+    display = create_display()
+    display.show_ready()
 
     app.state.config = config
     app.state.container_repo = container_repo
     app.state.machine = machine
     app.state.alerts = alerts
+    app.state.display = display
 
     yield
-    # --- Shutdown: nothing to clean up for in-memory prototype ---
+    # --- Shutdown: switch off the display ---
+    display.close()
 
 
 app = FastAPI(
